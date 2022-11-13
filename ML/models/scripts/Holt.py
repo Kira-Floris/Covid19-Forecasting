@@ -46,6 +46,5 @@ class HoltModel:
         'winter holt': self._winter_model_tuning_and_train() 
     }
 
-# dataset = rwanda_model_data.set_index('date')
-# holt = HoltModel(dataset, 'new_cases')
-# holt.train()
+  def data(self):
+    return self.df
