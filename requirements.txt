@@ -3,3 +3,17 @@ numpy
 scikit-learn
 statsmodels
 pmdarima
+
+fastapi
+uvicorn
+sqlalchemy
+python-multipart
+protobuf==3.20.1
+pillow
+SQLAlchemy-Utils
+matplotlib
+gunicorn==20.1.0
+fastapi-utils==0.2.1
+schedule
+passlib
+PyJWT
