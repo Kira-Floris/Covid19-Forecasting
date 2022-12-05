@@ -13,5 +13,8 @@ def get_session():
 # creating security reqs
 from fastapi import security  
 def get_oauth2schema():
-    oath2schema = security.OAuth2PasswordBearer(tokenUrl='/user/token')
+    oath2schema = security.OAuth2PasswordBearer(tokenUrl='token', auto_error=False)
     return oath2schema
+
+JWT_SECRET = 'j2d98h9sad9832hd9h28hq3ei2uhdi2h39871dhj923hd'
+JWT_ALGORITHM = 'HS256'

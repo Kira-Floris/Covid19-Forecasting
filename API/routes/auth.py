@@ -21,7 +21,7 @@ async def create_user(
     user = await utils_auth.create_user(user=user, db=session)
     return await utils_auth.create_token(user=user)
 
-@router.post('/user/token')
+@router.post('/token')
 async def generate_token(
     form_data:security.OAuth2PasswordRequestForm=fastapi.Depends(),
     session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
@@ -34,8 +34,8 @@ async def generate_token(
     if user:
         return await utils_auth.create_token(user=user)
     
-@router.post('/user/me', response_model=schemas_user.User)
+@router.get('/user/me')
 async def get_user(
     user:schemas_user.User=fastapi.Depends(utils_auth.get_current_user)
     ):
-    return schemas_user
+    return user
