@@ -18,6 +18,7 @@ def get_oauth2schema():
 
 # DATA Credentials
 DATA_SOURCE = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
+DATA_SAVE_FILE = 'data/covid19.csv'
 
 # JWT Credentials
 JWT_SECRET = 'j2d98h9sad9832hd9h28hq3ei2uhdi2h39871dhj923hd'

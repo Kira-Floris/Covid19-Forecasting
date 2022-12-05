@@ -1,9 +1,12 @@
 import fastapi
+from fastapi_utils.tasks import repeat_every
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
+import pandas as pd
 
 import os
 
+import settings
 from routes import auth, views
 
 # setting database
@@ -14,7 +17,7 @@ Base.metadata.create_all(engine)
 app = fastapi.FastAPI(
     title = 'Covid19 Forecasting',
     description = """
-    This is a final year project trying to prove covid 19 as seasonal disease and can be forecasted. The project implements machine learning model development, restFUL API to server it and a dashboard to display the results.\n\nThe scope for the project is limited to Rwanda and only covid19 is forecasted as a seasonal disease.""",
+    This is a final year project trying to prove covid 19 as seasonal disease and can be forecasted. The project implements machine learning model development, restFUL API to serve it and a dashboard to display the results.\n\nThe scope for the project is limited to Rwanda and only covid19 is forecasted as a seasonal disease.""",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -32,6 +35,24 @@ app.add_middleware(
 # adding routes
 app.include_router(auth.router)
 app.include_router(views.router)
+
+# load and save data each day for data retrieval speeds
+@app.on_event('startup')
+@repeat_every(seconds=86400, wait_first=False)
+async def retrieve_data():
+    print('Initiating startup process')
+    print('--------------------------')
+    
+    df = pd.read_csv(settings.DATA_SOURCE)
+    print('Data Retrieval Done')
+    print('-------------------')
+    
+    print(settings.DATA_SAVE_FILE)
+    
+    df.to_csv(settings.DATA_SAVE_FILE)
+    print('Data Saving Done')
+    print('----------------')
+    
 
 # running app
 if __name__=='__main__':
