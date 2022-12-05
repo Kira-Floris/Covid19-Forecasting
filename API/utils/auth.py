@@ -12,6 +12,8 @@ import models as models
 import schemas as schemas
 import settings
 
+oauth2schema = settings.get_oauth2schema()
+
 async def get_user_by_email(email:str, db:sqlalchemy.orm.Session):
     return db.query(models.user.User).filter(models.user.User.email==email).first()
 
@@ -38,17 +40,6 @@ async def authenticate_user(email:str, password:str, session:sqlalchemy.orm.Sess
     if not user.verify_password(password):
         raise fastapi.HTTPException(status=401, detail='Invalid Credentials')
     return user
-
-oauth2schema = settings.get_oauth2schema()
-
-# async def get_current_user(session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session), 
-#                     token:str=oauth2schema):
-    
-#     try:
-#         payload = jwt.decode(token, jwt_secret, algorith=['HS256'])
-#         user = session.query(models.user.User).get(payload['id'])
-#     except Exception as error:
-#         raise fastapi.HTTPException(status_code=401, detail='Invalid Credentials')
 
 async def get_current_user(token:str=fastapi.Depends(oauth2schema), session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)):
     try:

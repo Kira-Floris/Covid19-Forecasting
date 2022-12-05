@@ -16,5 +16,9 @@ def get_oauth2schema():
     oath2schema = security.OAuth2PasswordBearer(tokenUrl='token', auto_error=False)
     return oath2schema
 
+# DATA Credentials
+DATA_SOURCE = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
+
+# JWT Credentials
 JWT_SECRET = 'j2d98h9sad9832hd9h28hq3ei2uhdi2h39871dhj923hd'
 JWT_ALGORITHM = 'HS256'

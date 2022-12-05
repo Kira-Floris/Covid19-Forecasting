@@ -4,7 +4,7 @@ import uvicorn
 
 import os
 
-from routes import auth
+from routes import auth, views
 
 # setting database
 from config.database import Base, engine, SessionLocal
@@ -31,6 +31,7 @@ app.add_middleware(
 
 # adding routes
 app.include_router(auth.router)
+app.include_router(views.router)
 
 # running app
 if __name__=='__main__':
