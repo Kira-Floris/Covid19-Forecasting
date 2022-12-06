@@ -37,21 +37,27 @@ app.include_router(auth.router)
 app.include_router(views.router)
 
 # load and save data each day for data retrieval speeds
-@app.on_event('startup')
-@repeat_every(seconds=86400, wait_first=False)
-async def retrieve_data():
-    print('Initiating startup process')
-    print('--------------------------')
+# @app.on_event('startup')
+# @repeat_every(seconds=86400, wait_first=False)
+# async def retrieve_data():
+#     print('Initiating startup process')
+#     print('--------------------------')
     
-    df = pd.read_csv(settings.DATA_SOURCE)
-    print('Data Retrieval Done')
-    print('-------------------')
+#     df = pd.read_csv(settings.DATA_SOURCE)
+#     print('Data Retrieval Done')
+#     print('-------------------')
     
-    print(settings.DATA_SAVE_FILE)
+#     # rename index column to id
+#     df.index.name = 'id'
     
-    df.to_csv(settings.DATA_SAVE_FILE)
-    print('Data Saving Done')
-    print('----------------')
+#     # drop columns that are not wanted
+#     # get wanted list
+#     df.drop(df.columns.difference(settings.DATA_COLUMNS), axis=1, inplace=True)
+#     print(df.head(10))
+    
+#     df.to_csv(settings.DATA_SAVE_FILE)
+#     print('Data Saving Done')
+#     print('----------------')
     
 
 # running app
