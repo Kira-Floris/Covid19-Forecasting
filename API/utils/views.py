@@ -7,7 +7,7 @@ sys.path.append('..')
 
 import settings
 
-async def get_data(country=None, columns=['date','new_cases','continent','location','iso_code','total_cases','new_cases','new_cases','total_deaths','new_deaths']):
+async def get_data(country=None):
     df = pd.read_csv(settings.DATA_SAVE_FILE)
             
     # choose a single country
