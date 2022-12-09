@@ -6,6 +6,10 @@ from sklearn.metrics import mean_squared_error
 import pandas as pd
 import numpy as np
 
+import datetime
+
+import pickle
+
 class ArimaModel:
   models = {}
 
@@ -26,6 +30,11 @@ class ArimaModel:
     
     score = np.sqrt(mean_squared_error(self.y_prediction[self.target], self.y_prediction[arima_type]))
     
+    save_path = arima_type+'_model.pkl'
+
+    with open('saved_models/'+save_path, 'wb') as f:
+      pickle.dump(model, f)
+
     ArimaModel.models[arima_type] = {
         'score':score,
         'model':model
@@ -43,8 +52,13 @@ class ArimaModel:
   def data_predictions(self):
     return self.y_prediction
 
+  # def forecast(self, start_date=datetime.now().date()):
+  #   pass
 
-# dataset = rwanda_model_data.set_index('date')
-# arima = ArimaModel(dataset, 'new_cases')
-# print(arima.train())
-# arima.data_predictions()
+  def plot(self, model_type):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=self.model_train.index, y=self.model_train[self.target], mode='lines+markers', name='Train Data for Cases'))
+    fig.add_trace(go.Scatter(x=self.valid.index, y=self.valid[self.target], mode='lines+markers', name='Validation Data for Cases'))
+    fig.add_trace(go.Scatter(x=self.valid.index, y=self.y_prediction[model_type], mode='lines+markers', name='Prediction Data for Cases'))
+    fig.update_layout(title='Forecasting for '+self.target+' using '+model_type, xaxis_title='Date', yaxis_title=self.target, legend=dict(x=0,y=1, traceorder='normal'))
+    fig.show()
