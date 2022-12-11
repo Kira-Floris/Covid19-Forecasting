@@ -1,7 +1,7 @@
 import pandas as pd
 
 import sys
-sys.path.append('../..')
+sys.path.append('..')
 
 import API.settings as API_settings
 
