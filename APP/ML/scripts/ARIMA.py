@@ -6,6 +6,11 @@ from sklearn.metrics import mean_squared_error
 import pandas as pd
 import numpy as np
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 import datetime
 
 import pickle
@@ -32,8 +37,8 @@ class ArimaModel:
     
     save_path = arima_type+'_model.pkl'
 
-    with open('saved_models/'+save_path, 'wb') as f:
-      pickle.dump(model, f)
+    # with open('saved_models/'+save_path, 'wb') as f:
+    #   pickle.dump(model, f)
 
     ArimaModel.models[arima_type] = {
         'score':score,

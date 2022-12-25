@@ -1,8 +1,11 @@
 pandas
 numpy
+seaborn
+plotly
 scikit-learn
 statsmodels
 pmdarima
+prophet
 
 fastapi
 uvicorn

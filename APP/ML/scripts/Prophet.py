@@ -26,16 +26,18 @@ class ProphetModel:
         'score':score,
         'model':self.prophet
     }
-    with open('saved_models/'+save_path, 'w') as f:
-      f.write(model_to_json(self.prophet))
+    # with open('saved_models/'+save_path, 'w') as f:
+    #   f.write(model_to_json(self.prophet))
 
     return ProphetModel.models['prophet']
 
   def train(self):
     self._model_tuning_and_train()
 
-  def data_predictions(self):
-    return self.predictions['yhat']
+  def data_predictions(self, start, periods=17):
+    preds = self.predictions[self.predictions['ds']>str(start)]
+    print(preds)
+    return preds['yhat']
 
   def plot(self):
     print(self.prophet.plot(self.predictions))

@@ -11,6 +11,9 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 import pickle
+import warnings
+
+warnings.filterwarnings('ignore')
 
 class HoltModel:
   holt_linear = None
@@ -30,7 +33,8 @@ class HoltModel:
     self.y_prediction['Holt_Linear'] = HoltModel.holt_linear.forecast(len(self.valid))
     score = np.sqrt(mean_squared_error(self.y_prediction[self.target], self.y_prediction['Holt_Linear']))
     
-    HoltModel.holt_linear.save('saved_models/'+save_path)
+    # HoltModel.holt_linear.save('saved_models/'+save_path)
+    
     
     return {
         'score':score,
@@ -43,7 +47,7 @@ class HoltModel:
     self.y_prediction['Holt_Winter'] = HoltModel.holt_winter.forecast(len(self.valid))
     score = np.sqrt(mean_squared_error(self.y_prediction[self.target], self.y_prediction['Holt_Winter']))
     
-    HoltModel.holt_winter.save('saved_models/'+save_path)
+    # HoltModel.holt_winter.save('saved_models/'+save_path)
     
     return {
         'score':score,
