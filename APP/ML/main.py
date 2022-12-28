@@ -11,7 +11,7 @@ import settings as API_settings
 
 def main():
     # import dataset
-    df = pd.read_csv('../data/covid19.csv')
+    df = pd.read_csv('./data/covid19.csv')
     print('Loading data finished')
     print('---------------------------')
     
@@ -24,6 +24,7 @@ def main():
     # cleaning data
     nullData = cleaning.NullData(rwanda_df)
     rwanda_null_treated_data = nullData.fill_with_mean([])
+    print(rwanda_df.head())
     print('Cleaning data finished')
     print('---------------------------')
     
@@ -31,6 +32,7 @@ def main():
     # columns for training are data and new_cases
     selected_columns = ['date','new_cases']
     rwanda_model_data = rwanda_null_treated_data[selected_columns]
+    print(rwanda_model_data['date'])
     tail = list(rwanda_model_data.tail(1)['date'])[0]
     print(tail)
     
@@ -64,9 +66,10 @@ def main():
     print('Training FbProphet finished')
     print('---------------------------')
     predictions['yhat'] = list(prophet_.data_predictions(start=tail))
+    print(predictions)
     
     # saving predictions data
-    predictions.to_csv('../data/covid19-future-values.csv')
+    predictions.to_csv('./data/covid19-future-values.csv')
     print('Future values saved')
     print('---------------------------')
     
