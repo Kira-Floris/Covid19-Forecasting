@@ -18,20 +18,28 @@ import pickle
 class ArimaModel:
   models = {}
 
-  def __init__(self, df, target:str, train_ratio=0.95):
+  def __init__(self, df, target:str, train_ratio=0.95, forecast_size=18):
     self.df = df
     self.target = target
     self.train_ratio = train_ratio
+    self.forecast_size = forecast_size
     self.model_train = self.df.iloc[:int(self.df.shape[0]*self.train_ratio)]
     self.valid = self.df.iloc[int(self.df.shape[0]*self.train_ratio):]
     self.y_prediction = self.valid.copy()
+    self.predictions = pd.DataFrame()
 
   def _model_tuning_and_train(self, arima_type,trace=True, error_action='ignore',start_p=0, start_q=0, max_p=4, max_q=0, suppress_warnings=True, stepwise=False, seasonal=False, m=0):
+    # model training
     model = auto_arima(self.model_train[self.target],trace=trace, error_action=error_action, start_p=start_p,
                        start_q=start_q, max_p=4, max_q=0, suppress_warnings=suppress_warnings, stepwise=stepwise,
                        seasonal=seasonal, m=m, D=None)
     predictions = model.predict(len(self.valid))
     self.y_prediction[arima_type] = predictions.values
+    
+    # making future predictions
+    self.predictions[arima_type] = auto_arima(self.df[self.target],trace=trace, error_action=error_action, start_p=start_p,
+                       start_q=start_q, max_p=4, max_q=0, suppress_warnings=suppress_warnings, stepwise=stepwise,
+                       seasonal=seasonal, m=m, D=None).predict(self.forecast_size).values
     
     score = np.sqrt(mean_squared_error(self.y_prediction[self.target], self.y_prediction[arima_type]))
     
@@ -55,7 +63,7 @@ class ArimaModel:
     return ArimaModel.models
 
   def data_predictions(self):
-    return self.y_prediction
+    return self.predictions
 
   # def forecast(self, start_date=datetime.now().date()):
   #   pass

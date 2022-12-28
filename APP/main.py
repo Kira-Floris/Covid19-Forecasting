@@ -5,6 +5,9 @@ import uvicorn
 import pandas as pd
 
 import os
+import sys
+
+# print(sys.path)
 
 import settings
 from routes import auth, views
@@ -12,6 +15,9 @@ from routes import auth, views
 # setting database
 from config.database import Base, engine, SessionLocal
 Base.metadata.create_all(engine)
+
+# importing training schedules
+from ML.main import main as Training
 
 # setting general configuration for the app
 app = fastapi.FastAPI(
@@ -58,6 +64,15 @@ async def retrieve_data():
     df.to_csv(settings.DATA_SAVE_FILE)
     print('Data Saving Done')
     print('----------------')
+    
+    print('\n\nTRAINING MODELS')
+    print('----------------')
+    Training()
+    print('Training Done')
+    print('----------------')
+    
+    
+    
     
 
 # running app

@@ -1,9 +1,10 @@
 import pandas as pd
 import sys
 
-from scripts import Holt, ARIMA, Prophet
-from utils import cleaning
+from ML.scripts import Holt, ARIMA, Prophet
+from ML.utils import cleaning
 
+# print(sys.path)
 sys.path.append('..')
 
 import settings as API_settings
@@ -12,6 +13,7 @@ def main():
     # import dataset
     df = pd.read_csv('../data/covid19.csv')
     print('Loading data finished')
+    print('---------------------------')
     
     # creating a prediction dataframe
     predictions = pd.DataFrame()
@@ -23,6 +25,7 @@ def main():
     nullData = cleaning.NullData(rwanda_df)
     rwanda_null_treated_data = nullData.fill_with_mean([])
     print('Cleaning data finished')
+    print('---------------------------')
     
     # select some columns
     # columns for training are data and new_cases
@@ -32,6 +35,7 @@ def main():
     print(tail)
     
     print('Training Models Starting')
+    print('---------------------------')
     
     # training holtmodels
     dataset = rwanda_model_data.set_index('date')
@@ -39,6 +43,7 @@ def main():
     holt.train()
     # holt.plot('Holt_Linear')
     print('Training Holt models finished')
+    print('---------------------------')
     predictions['Holt_Linear'] = holt.data_predictions()['Holt_Linear']
     predictions['Holt_Winter'] = holt.data_predictions()['Holt_Winter']
     
@@ -48,18 +53,22 @@ def main():
     arima.train()
     # arima.plot('ar_arima')
     print('Training ARIMA models finished')
+    print('---------------------------')
     predictions['ar_arima'] = arima.data_predictions()['ar_arima']
     
     # train prophet
     dataset = rwanda_model_data.set_index('date')
     prophet_ = Prophet.ProphetModel(dataset, 'new_cases')
     prophet_.train()
-    # prophet_.plot()
+    prophet_.plot()
     print('Training FbProphet finished')
-    print(len(predictions))
+    print('---------------------------')
     predictions['yhat'] = list(prophet_.data_predictions(start=tail))
-    print(predictions)
     
-
+    # saving predictions data
+    predictions.to_csv('../data/covid19-future-values.csv')
+    print('Future values saved')
+    print('---------------------------')
+    
 if __name__=="__main__":
     main()

@@ -21,6 +21,8 @@ async def create_user(
     user = await utils_auth.create_user(user=user, db=session)
     return await utils_auth.create_token(user=user)
 
+
+# token should be sent on email
 @router.post('/token')
 async def generate_token(
     form_data:security.OAuth2PasswordRequestForm=fastapi.Depends(),
