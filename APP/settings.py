@@ -16,9 +16,11 @@ def get_oauth2schema():
     oath2schema = security.OAuth2PasswordBearer(tokenUrl='token', auto_error=False)
     return oath2schema
 
-# DATA Credentials
+# DATA information
+COUNTRY = 'Rwanda'
 DATA_SOURCE = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
-DATA_SAVE_FILE = 'data/covid19.csv'
+DATA_SAVE_FILE = './data/covid19.csv'
+PREDICTION_SAVE_FILE = './data/covid19-future-values.csv'
 DATA_COLUMNS = ['date','new_cases','continent','location','iso_code','total_cases','new_cases','new_cases','total_deaths','new_deaths']
 
 # JWT Credentials

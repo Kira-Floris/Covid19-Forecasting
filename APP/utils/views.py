@@ -7,13 +7,29 @@ sys.path.append('..')
 
 import settings
 
-async def get_data(country=None):
+def to_json(df, orient='records'):
+    tj = df.to_json(orient=orient)
+    parsed = json.loads(tj)
+    return parsed
+
+def get_data():
     df = pd.read_csv(settings.DATA_SAVE_FILE)
             
     # choose a single country
-    if country:
-        df = df[df['location']==country]
+    df = df[df['location']==settings.COUNTRY]
     
-    to_json = df.to_json(orient='records')
-    parsed = json.loads(to_json)
+    parsed = to_json(df)
     return parsed
+
+def get_predictions():
+    df = pd.read_csv(settings.PREDICTION_SAVE_FILE)
+    parsed = to_json(df)
+    return parsed
+
+async def data():
+    data = get_data()
+    predictions = get_predictions()
+    print(data,
+          predictions)
+    return None
+    

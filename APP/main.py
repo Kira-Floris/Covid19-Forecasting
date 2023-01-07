@@ -42,10 +42,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(views.router)
 
-# load and save data each day for data retrieval speeds
-@app.on_event('startup')
-@repeat_every(seconds=86400, wait_first=False)
-async def retrieve_data():
+def background():
     print('Initiating startup process')
     print('--------------------------')
     
@@ -59,7 +56,7 @@ async def retrieve_data():
     # drop columns that are not wanted
     # get wanted list
     df.drop(df.columns.difference(settings.DATA_COLUMNS), axis=1, inplace=True)
-    print(df.head(10))
+    # print(df.head(10))
     
     df.to_csv(settings.DATA_SAVE_FILE)
     print('Data Saving Done')
@@ -70,8 +67,16 @@ async def retrieve_data():
     Training()
     print('Training Done')
     print('----------------')
+
+# load and save data each day for data retrieval speeds
+@app.on_event('startup')
+@repeat_every(seconds=86400, wait_first=False)
+async def retrieve_data():
+    # background()
+    pass
     
-    
+
+# @app.
     
     
 
