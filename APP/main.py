@@ -39,8 +39,8 @@ app.add_middleware(
 )
 
 # adding routes
-app.include_router(auth.router)
-app.include_router(views.router)
+app.include_router(auth.router, prefix='/auth')
+app.include_router(views.router, prefix='/api')
 
 def background():
     print('Initiating startup process')
@@ -74,14 +74,9 @@ def background():
 async def retrieve_data():
     # background()
     pass
-    
-
-# @app.
-    
-    
 
 # running app
 if __name__=='__main__':
-    port = os.getenv('PORT', default=8000)
+    print(f"Server hosted at {settings.HOST}:{int(settings.PORT)}")
     app_str = 'main:app'
-    uvicorn.run(app_str, host='0.0.0.0', port=int(port) or 8000, reload=True)
+    uvicorn.run(app_str, host=settings.HOST, port=settings.PORT, reload=True)

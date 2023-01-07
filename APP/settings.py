@@ -1,3 +1,6 @@
+import os
+import sys
+
 # generating session to query through the model
 from config.database import SessionLocal
 
@@ -26,3 +29,7 @@ DATA_COLUMNS = ['date','new_cases','continent','location','iso_code','total_case
 # JWT Credentials
 JWT_SECRET = 'j2d98h9sad9832hd9h28hq3ei2uhdi2h39871dhj923hd'
 JWT_ALGORITHM = 'HS256'
+
+# server settings
+PORT = int(os.getenv('PORT', default=8000)) or 8000
+HOST = '0.0.0.0'

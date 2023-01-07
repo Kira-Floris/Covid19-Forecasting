@@ -12,11 +12,14 @@ def to_json(df, orient='records'):
     parsed = json.loads(tj)
     return parsed
 
-def get_data():
+def get_data(columns=None):
     df = pd.read_csv(settings.DATA_SAVE_FILE)
             
     # choose a single country
     df = df[df['location']==settings.COUNTRY]
+    
+    if columns:
+        df = df[columns]
     
     parsed = to_json(df)
     return parsed
@@ -29,7 +32,11 @@ def get_predictions():
 async def data():
     data = get_data()
     predictions = get_predictions()
-    print(data,
-          predictions)
-    return None
+    new_cases = get_data(['new_cases'])
+    res = {
+        'all':data,
+        'cases_predictions':predictions,
+        'cases': new_cases
+    }
+    return res
     

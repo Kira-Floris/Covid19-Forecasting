@@ -12,5 +12,5 @@ router = fastapi.APIRouter()
 
 @router.get('/data')
 async def get_data():
-    data = await utils_views.get_data()
+    data = await utils_views.data()
     return data
