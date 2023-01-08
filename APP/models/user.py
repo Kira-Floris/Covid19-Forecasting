@@ -13,8 +13,12 @@ class User(Base):
     __tablename__ = 'User'
     id = sql.Column(sql.Integer, primary_key=True)
     email = sql.Column(sql.String)
+    company = sql.Column(sql.String)
     hashed_password = sql.Column(sql.String)
     date_created = sql.Column(sql.DateTime, default=datetime.datetime.now)
+    
+    token = sql.Column(sql.String)
+    token_type = sql.Column(sql.String, default='bearer')
     
     def verify_password(self, password:str):
         return hash.bcrypt.verify(password, self.hashed_password)
@@ -23,3 +27,4 @@ class User(Base):
         for key, value in kwargs.items():
             if hasattr(self, key):
                 setattr(self, key, value)
+                

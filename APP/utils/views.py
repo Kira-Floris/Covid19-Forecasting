@@ -32,7 +32,7 @@ def get_predictions():
 async def data():
     data = get_data()
     predictions = get_predictions()
-    new_cases = get_data(['new_cases'])
+    new_cases = get_data(['id','date','new_cases'])
     res = {
         'all':data,
         'cases_predictions':predictions,

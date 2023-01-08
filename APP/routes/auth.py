@@ -13,14 +13,13 @@ from utils import auth as utils_auth
 
 router = fastapi.APIRouter()
 
-@router.post('/user/register')
+@router.post('/register')
 async def create_user(
     user:schemas_user.UserCreate, 
     session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)):
     
     user = await utils_auth.create_user(user=user, db=session)
-    return await utils_auth.create_token(user=user)
-
+    return user
 
 # token should be sent on email
 @router.post('/token')
@@ -34,10 +33,23 @@ async def generate_token(
         session=session)
     
     if user:
-        return await utils_auth.create_token(user=user)
+        return user
     
-@router.get('/user/me')
-async def get_user(
-    user:schemas_user.User=fastapi.Depends(utils_auth.get_current_user)
+@router.get('/token/update')
+async def update_token(
+    request:fastapi.Request,
+    session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
     ):
+    token = request.headers['Authorization']
+    user = await utils_auth.check_token(token,session)
+    user = await utils_auth.generate_token(user, session)
+    return user 
+    
+@router.get('/me')
+async def get_user(
+    request:fastapi.Request,
+    session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
+    ):
+    token = request.headers['Authorization']
+    user = await utils_auth.check_token(token,session)
     return user

@@ -18,5 +18,6 @@ matplotlib
 gunicorn==20.1.0
 fastapi-utils==0.2.1
 schedule
+bcrypt
 passlib
 PyJWT
