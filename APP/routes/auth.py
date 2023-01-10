@@ -53,3 +53,7 @@ async def get_user(
     token = request.headers['Authorization']
     user = await utils_auth.check_token(token,session)
     return user
+
+@router.get('/test')
+async def test(blah:str=fastapi.Depends(utils_auth.verify_token)):
+    return {"test":blah}

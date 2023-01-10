@@ -61,3 +61,12 @@ async def check_token(token:str, session:sqlalchemy.orm.Session=fastapi.Depends(
     token = token.split(' ')[1]
     user = await get_current_user(token, session)
     return user
+
+# decorator for authentication
+async def verify_token(
+    request:fastapi.Request,
+    session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
+):
+    token = request.headers['Authorization']
+    user = await utils_auth.check_token(token,session)
+    return user
