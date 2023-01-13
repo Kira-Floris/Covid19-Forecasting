@@ -18,6 +18,12 @@ def main():
     # creating a prediction dataframe
     predictions = pd.DataFrame()
     
+    # adding extra data about rwanda
+    predictions.index.name = 'id'
+    predictions['iso_code'] = [settings.ISO_CODE]*18
+    predictions['location'] = [settings.COUNTRY]*18
+    predictions['new_deaths'] = [None]*18 
+    
     # filtering rwanda data
     rwanda_df = df[df['location']=='Rwanda']
     
@@ -45,8 +51,8 @@ def main():
     holt.train()
     print('Training Holt models finished')
     print('---------------------------')
-    predictions['Holt_Linear'] = holt.data_predictions()['Holt_Linear']
-    predictions['Holt_Winter'] = holt.data_predictions()['Holt_Winter']
+    predictions['holt_linear'] = holt.data_predictions()['Holt_Linear']
+    predictions['holt_winter'] = holt.data_predictions()['Holt_Winter']
     
     # training arima
     dataset = rwanda_model_data.set_index('date')
@@ -62,10 +68,11 @@ def main():
     prophet_.train()
     print('Training FbProphet finished')
     print('---------------------------')
-    predictions['yhat'] = list(prophet_.data_predictions(start=tail))
+    # print(prophet_.data)
+    predictions['fb_prophet'], predictions['date'] = prophet_.data_predictions(start=tail)
     
     # saving predictions data
-    print(predictions)
+    # print(predictions)
     predictions.to_csv(settings.PREDICTION_SAVE_FILE)
     print('Future values saved')
     print('---------------------------')

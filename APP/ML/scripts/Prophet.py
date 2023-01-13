@@ -37,7 +37,8 @@ class ProphetModel:
 
   def data_predictions(self, start):
     preds = self.predictions[self.predictions['ds']>str(start)]
-    return preds['yhat']
+    # print(preds)
+    return list(preds['yhat']), list(preds['ds'])
 
   def plot(self):
     print(self.prophet.plot(self.predictions))

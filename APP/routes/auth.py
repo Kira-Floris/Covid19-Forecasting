@@ -55,5 +55,8 @@ async def get_user(
     return user
 
 @router.get('/test')
-async def test(blah:str=fastapi.Depends(utils_auth.verify_token)):
-    return {"test":blah}
+async def test(
+    blah:str=fastapi.Depends(utils_auth.verify_token), 
+    session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
+    ):
+    return {"test":'here we are'}

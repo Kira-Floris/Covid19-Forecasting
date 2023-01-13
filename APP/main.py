@@ -56,6 +56,7 @@ def background():
     # drop columns that are not wanted
     # get wanted list
     df.drop(df.columns.difference(settings.DATA_COLUMNS), axis=1, inplace=True)
+    df = df[df['location']==settings.COUNTRY]
     # print(df.head(10))
     
     df.to_csv(settings.DATA_SAVE_FILE)

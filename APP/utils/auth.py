@@ -68,5 +68,5 @@ async def verify_token(
     session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
 ):
     token = request.headers['Authorization']
-    user = await utils_auth.check_token(token,session)
+    user = await check_token(token,session)
     return user
