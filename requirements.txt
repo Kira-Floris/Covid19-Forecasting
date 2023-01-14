@@ -8,6 +8,7 @@ pmdarima
 prophet
 
 fastapi
+fastapi-mail
 uvicorn
 sqlalchemy
 python-multipart

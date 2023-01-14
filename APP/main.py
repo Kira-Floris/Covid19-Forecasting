@@ -3,6 +3,7 @@ from fastapi_utils.tasks import repeat_every
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 import pandas as pd
+import sqlalchemy
 
 import os
 import sys
@@ -11,6 +12,9 @@ import sys
 
 import settings
 from routes import auth, views
+from utils import mail as utils_mail
+import models
+from config.database import SessionLocal
 
 # setting database
 from config.database import Base, engine, SessionLocal
@@ -42,10 +46,12 @@ app.add_middleware(
 app.include_router(auth.router, prefix='/auth')
 app.include_router(views.router, prefix='/api')
 
-def background():
+async def background(session):
     print('Initiating startup process')
     print('--------------------------')
     
+    print('\nRETRIEVING DATA')
+    print('----------------')
     df = pd.read_csv(settings.DATA_SOURCE)
     print('Data Retrieval Done')
     print('-------------------')
@@ -63,17 +69,39 @@ def background():
     print('Data Saving Done')
     print('----------------')
     
-    print('\n\nTRAINING MODELS')
+    print('\nTRAINING MODELS')
     print('----------------')
-    Training()
+    # Training()
     print('Training Done')
     print('----------------')
+    
+    # checking for spikes and sending notifications
+    print('\nCHECKING FOR SPIKES')
+    print('----------------')
+    predictions = pd.read_csv(settings.PREDICTION_SAVE_FILE)
+    send_email = False
+    for index, row in predictions.iterrows():
+        if row['fb_prophet'] > settings.THRESHOLD:
+            send_email = True
+            break
+    if send_email:
+        print('Spikes found, sending email notifications.')
+        print('----------------')
+        await utils_mail.automated_email(predictions, session)
+        print('Email notifications sent.')
+        print('----------------')
+    else:
+        print('No Spikes found.')
+        print('----------------')
+        
+    
 
 # load and save data each day for data retrieval speeds
 @app.on_event('startup')
 @repeat_every(seconds=86400, wait_first=False)
 async def retrieve_data():
-    # background()
+    # with SessionLocal() as session:
+    #     await background(session)
     pass
 
 # running app
