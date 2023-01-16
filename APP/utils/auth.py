@@ -5,6 +5,7 @@ import passlib.hash as hash
 import jwt
 
 import fastapi
+import datetime
 
 import sys
 sys.path.append('..')
@@ -18,8 +19,11 @@ def get_user_by_email(email:str, db:sqlalchemy.orm.Session):
     return db.query(models.user.User).filter(models.user.User.email==email).first()
 
 async def create_user(user:schemas.user.UserCreate, db:sqlalchemy.orm.Session):
+    if get_user_by_email(user.email, db):
+        return None
     hashed_password = hash.bcrypt.hash(user.password)
     user_dict = user.dict()
+    # user_dict['date_created'] = datetime.datetime.now
     del user_dict['password']
     token = jwt.encode(user_dict, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
     user_obj = models.user.User(email=user.email, company=user.company, hashed_password=hashed_password, token=token)
@@ -33,10 +37,12 @@ async def generate_token(user:models.user.User, session:sqlalchemy.orm.Session=f
     user_schema_obj = schemas.user.User.from_orm(user)
     user_dict = user_schema_obj.dict()
     del user_dict['date_created']
+    # user_dict['date_created'] = datetime.datetime.now
     del user_dict['token']
     del user_dict['token_type']
     token = jwt.encode(user_dict, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
     user.token = token
+    # user.date_created = user_dict['date_created']
     session.commit()
     return schemas.user.User.from_orm(user)
 

@@ -24,3 +24,10 @@ async def get_predictions(
     session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)):
     data = await utils_views.get_predictions()
     return {"data":data}
+
+@router.get('/predictions/line')
+async def get_predictions_line(
+    veriffication:str=fastapi.Depends(utils_auth.verify_token), 
+    session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)):
+    data = await utils_views.get_line()
+    return {"data":data}

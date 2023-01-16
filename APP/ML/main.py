@@ -15,6 +15,9 @@ def main():
     print('Loading data finished')
     print('---------------------------')
     
+    # creating a prediction line chart
+    prediction_line = pd.DataFrame()
+    prediction_line.index.name = 'id'
     # creating a prediction dataframe
     predictions = pd.DataFrame()
     
@@ -74,6 +77,11 @@ def main():
     # saving predictions data
     # print(predictions)
     predictions.to_csv(settings.PREDICTION_SAVE_FILE)
+    
+    # forecasting line chart
+    prediction_line['date'], prediction_line['line'] = prophet_.predictions['ds'], prophet_.predictions['yhat']
+    prediction_line.to_csv(settings.PREDICTION_LINE_FILE)
+    
     print('Future values saved')
     print('---------------------------')
     # print(predictions)

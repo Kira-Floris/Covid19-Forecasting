@@ -71,7 +71,7 @@ async def background(session):
     
     print('\nTRAINING MODELS')
     print('----------------')
-    # Training()
+    Training()
     print('Training Done')
     print('----------------')
     
@@ -101,7 +101,7 @@ async def background(session):
 @repeat_every(seconds=86400, wait_first=False)
 async def retrieve_data():
     # with SessionLocal() as session:
-    #     await background(session)
+        # await background(session)
     pass
 
 # running app

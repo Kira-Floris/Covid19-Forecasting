@@ -29,6 +29,11 @@ async def get_predictions():
     parsed = to_json(df)
     return parsed
 
+async def get_line():
+    df = pd.read_csv(settings.PREDICTION_LINE_FILE)
+    parsed = to_json(df)
+    return parsed
+
 async def data():
     data = await get_data()
     predictions = await get_predictions()

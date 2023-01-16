@@ -27,6 +27,7 @@ ISO_CODE = 'RWA'
 DATA_SOURCE = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
 DATA_SAVE_FILE = './data/covid19.csv'
 PREDICTION_SAVE_FILE = './data/covid19-future-values.csv'
+PREDICTION_LINE_FILE = './data/covid19-future-values_line.csv'
 DATA_COLUMNS = ['date','location','iso_code','new_cases','new_deaths']
 THRESHOLD = 100
 

@@ -12,7 +12,7 @@ from config.database import Base
 class User(Base):
     __tablename__ = 'User'
     id = sql.Column(sql.Integer, primary_key=True)
-    email = sql.Column(sql.String)
+    email = sql.Column(sql.String, )
     company = sql.Column(sql.String)
     hashed_password = sql.Column(sql.String)
     date_created = sql.Column(sql.DateTime, default=datetime.datetime.now)
