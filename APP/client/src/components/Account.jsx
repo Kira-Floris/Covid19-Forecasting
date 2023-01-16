@@ -2,60 +2,85 @@ import React, {useEffect, useState, useContext} from 'react';
 import AuthContext from '../context/AuthContext';
 import ErrorMessage from "./ErrorMessage";
 
+let object = {
+    email:"",
+    company:"",
+}
+
 const Account = () => {
-    const [email, setEmail] = useState("");
-    const [company, setCompany] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-    const {authTokens} = useContext(AuthContext)
-    const [user, setUser] = useState(null);
+    let {user, authTokens, loggedUser} = useContext(AuthContext);
+    let [person, setPerson] = useState({object});
+    let [errorMessage, setErrorMessage] = useState("");
 
-    let fetchUser = async () => {
-        const requestOptions = {
+    let fetchUser = async () =>{
+        let response = await fetch('/auth/me',{
             method:"GET",
-            headers: {"Authorization":"Bearer "+authTokens}
-        }
-        const response= await fetch('/auth/me', requestOptions);
-        const response_data = await response.json();
-
-        if(!response.ok){
-            setErrorMessage(response.detail);
+            headers:{"Authorization":"Bearer "+String(authTokens)},
+        });
+        let data = await response.json()
+        if (response.status===200){
+            return data;
         }else{
-            setUser(response_data);
+            return null
         }
+    }
+    
+    let getUser = async () =>{
+        var temp = await fetchUser();
+        setPerson({
+            ...person,
+            ["email"]:temp.email,
+            ["company"]:temp.company,
+        })
+    }
+    
+    let handleChange=(e)=>{
+        var name = e.target.name;
+        var value = e.target.value;
+        setPerson({
+          ...person,
+          [name]:value,
+        });
     };
 
-    const submitUpdate = async () => {
-        const requestOptions = {
-          method: "PUT",
-          headers: { 
-            "Content-Type": "application/json",
-            "Authorization": "Bearer "+authTokens,
-         },
-          body: JSON.stringify({ email: email, company:company}),
-        };
-        // console.log(user)
-    
-        const response = await fetch("/auth/users/"+user.id, requestOptions);
-        const data = await response.json();
-    
-        if (!response.ok) {
-          setErrorMessage(data.message);
-        } else {
-          setEmail("");
-          setCompany(""); 
-          setErrorMessage("")
-        }
-      };
-    
-      const handleSubmit = (e) => {
+    let handleSubmit = async(e)=>{
         e.preventDefault();
-        submitUpdate();
-      };
+        var temp = await fetchUser();
+        let response = await fetch('/auth/users/'+temp.id,{
+            method: "PUT",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+String(authTokens)
+            },
+            body:JSON.stringify({"email":person.email,"company":person.company})
+        });
+        if(response.status===200){
+            console.log('Success')
+        }else{
+            console.log("Something Went Wrong")
+        }
+    }
+
+    // let handlePassword = async(e)=>{
+    //     e.preventDefault();
+    //     let response = await fetch(passwordUrl,{
+    //         method: "PUT",
+    //         headers: {
+    //             "Content-Type":"application/json",
+    //             "Authorization":"Bearer "+String(authTokens)
+    //         },
+    //         body:JSON.stringify({"currentPassword":e.target.oldpassword.value,"newPassword":e.target.newpassword.value})
+    //     });
+    //     if(response.status===200){
+    //         console.log('Updated Successfully');
+    //     }else{
+    //         console.log("Something Went Wrong")
+    //     }
+    // }
 
     useEffect(()=>{
-        fetchUser()
-    },[user]);
-    // window.onload(()=>fetchUser())
+        getUser()
+    },[])
     return (
         <div className='container p-5'>
             <h2>Account</h2>
@@ -68,8 +93,9 @@ const Account = () => {
                             <input
                             type="email"
                             placeholder="Enter email"
-                            value={user?user.email:""}
-                            onChange={(e) => setEmail(e.target.value)}
+                            name="email"
+                            value={person.email}
+                            onChange={handleChange}
                             className="form-control"
                             required
                             />
@@ -81,8 +107,9 @@ const Account = () => {
                             <input
                             type="text"
                             placeholder="Enter Company Name"
-                            value={user?user.company:""}
-                            onChange={(e) => setCompany(e.target.value)}
+                            name="company"
+                            value={person.company}
+                            onChange={handleChange}
                             className="form-control"
                             required
                             />
@@ -99,7 +126,7 @@ const Account = () => {
             <div className="mx-3 my-4 p-4 border rounded-2 bg-light">
                 <h3>Token</h3>
                 <div className="px-3">
-                    <pre className='border p-2 rounded-1 bg-white'><code className="language-css">{user?user.token:""}</code></pre>
+                    <pre className='border p-2 rounded-1 bg-white'><code className="language-css">{authTokens}</code></pre>
                     <div className="w-100">
                         <button className="btn btn-md btn-primary rounded-0 px-5" type="button">
                         Generate New Token

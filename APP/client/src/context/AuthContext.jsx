@@ -13,7 +13,7 @@ export const AuthProvider = ({children}) =>{
     let userExists = localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null;
     let [authTokens, setAuthTokens] = useState(()=>authExists);
     let [user, setUser] = useState(()=>userExists);
-    let [loggedUser, setLoggedUser] = useState({});
+    let [loggedUser, setLoggedUser] = useState(null);
     let [loading, setLoading] = useState(true);
 
     const history = useHistory();
@@ -45,7 +45,14 @@ export const AuthProvider = ({children}) =>{
                     }
                 });
                 let dat = await res.json();
-                history.push('/dashboard');
+                if(res.status===200){
+                    setLoggedUser(dat);
+                    history.push('/dashboard');
+                }else{
+                    setLoggedUser(null);
+                    console.log('Something Went Wrong')
+                    history.push('/login')
+                }
             }else{
                 console.log('Something Went Wrong')
             }
@@ -88,8 +95,10 @@ export const AuthProvider = ({children}) =>{
             });
             let dat = await res.json();
             if(res.status === 200){
+                setLoggedUser(dat);
                 history.push("/dashboard")
             }else{
+                setLoggedUser(null);
                 console.log("Something went wrong");
                 history.push('/login')
             }
