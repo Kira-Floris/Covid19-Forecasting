@@ -1,13 +1,14 @@
 import React, {useState, useContext, useEffect} from 'react'
 
 import LineChart from './LineChart';
-import { UserContext } from '../context/UserContext';
+import AuthContext from '../context/AuthContext';
 
 export const Dashboard = () => {
     const [data, setData] = useState([]);
     const [prediction, setPrediction] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
-    const [token] = useContext(UserContext);
+    const {authTokens} = useContext(AuthContext);
+    const token = authTokens;
     const requestOptions = {
         method:"GET",
         headers: {"Authorization":"Bearer "+token}
@@ -69,7 +70,7 @@ export const Dashboard = () => {
 
     useEffect(()=>{
         fetchData();
-    },[]);
+    },[data]);
 
     return (
         <div className='d-flex justify-content-center'>

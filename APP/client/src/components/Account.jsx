@@ -1,19 +1,18 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { UserContext } from '../context/UserContext';
+import AuthContext from '../context/AuthContext';
 import ErrorMessage from "./ErrorMessage";
 
 const Account = () => {
     const [email, setEmail] = useState("");
     const [company, setCompany] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [, setToken] = useContext(UserContext);
-    const [token] = useContext(UserContext)
+    const {authTokens} = useContext(AuthContext)
     const [user, setUser] = useState(null);
 
     let fetchUser = async () => {
         const requestOptions = {
             method:"GET",
-            headers: {"Authorization":"Bearer "+token}
+            headers: {"Authorization":"Bearer "+authTokens}
         }
         const response= await fetch('/auth/me', requestOptions);
         const response_data = await response.json();
@@ -30,7 +29,7 @@ const Account = () => {
           method: "PUT",
           headers: { 
             "Content-Type": "application/json",
-            "Authorization": "Bearer "+token,
+            "Authorization": "Bearer "+authTokens,
          },
           body: JSON.stringify({ email: email, company:company}),
         };
@@ -42,7 +41,6 @@ const Account = () => {
         if (!response.ok) {
           setErrorMessage(data.message);
         } else {
-          setToken(data.token);
           setEmail("");
           setCompany(""); 
           setErrorMessage("")
@@ -54,26 +52,6 @@ const Account = () => {
         submitUpdate();
       };
 
-    const generateNewToken = async () =>{
-        const requestOptions = {
-            method: "GET",
-            headers: { 
-              "Content-Type": "application/json",
-              "Authorization": "Bearer "+token,
-            }
-        };
-        const response = await fetch("/auth/token/update", requestOptions);
-        const data = await response.json();
-    
-        if (!response.ok) {
-          setErrorMessage(data.message);
-        } else {
-          setToken(data.token);
-          setEmail("");
-          setCompany(""); 
-          setErrorMessage("")
-        }
-    }
     useEffect(()=>{
         fetchUser()
     },[user]);
@@ -123,7 +101,7 @@ const Account = () => {
                 <div className="px-3">
                     <pre className='border p-2 rounded-1 bg-white'><code className="language-css">{user?user.token:""}</code></pre>
                     <div className="w-100">
-                        <button className="btn btn-md btn-primary rounded-0 px-5" type="button" onClick={()=>generateNewToken()}>
+                        <button className="btn btn-md btn-primary rounded-0 px-5" type="button">
                         Generate New Token
                         </button>
                     </div>

@@ -1,13 +1,13 @@
-import React, {useContext, useState} from 'react';
-import {Route, Redirect} from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom'
+import {useContext} from 'react';
+import AuthContext from '../context/AuthContext';
 
-import { UserContext } from '../context/UserContext';
+const PrivateRoute = ({children, ...rest}) => {
+    let {user} = useContext(AuthContext);
 
-export const PrivateRoute = ({children, ...rest}) => {
-    const [token] = useContext(UserContext); 
-    return (
-        <Route {...rest}>
-            {!token?<Redirect to="/login"/>:children}
-        </Route>
+    return(
+        <Route {...rest}>{!user ? <Redirect to="/login"/> : children}</Route>
     )
 }
+
+export default PrivateRoute;

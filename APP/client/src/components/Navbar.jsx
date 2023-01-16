@@ -1,30 +1,13 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
-import {UserContext} from '../context/UserContext';
+import AuthContext from '../context/AuthContext';
 
 
 export default function Navbar() {
-    const [token] = useContext(UserContext)
-    const [user, setUser] = useState(null);
+    const {authTokens, loggedInUser, user, logOut} = useContext(AuthContext);
+    const tokenExist = (localStorage.getItem('authTokens')!==null)?true:false;
     const [errorMessage, setErrorMessage] = useState("");
-    let fetchUser = async () => {
-        const requestOptions = {
-            method:"GET",
-            headers: {"Authorization":"Bearer "+token}
-        }
-        const response= await fetch('/auth/me', requestOptions);
-        const response_data = await response.json();
-
-        if(!response.ok){
-            setErrorMessage(response.detail);
-        }else{
-            setUser(response_data);
-        }
-    };
-    useEffect(()=>{
-        fetchUser()
-    },[]);
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light shadow mb-4">
         <div className="container">
@@ -47,7 +30,7 @@ export default function Navbar() {
                 <li className="nav-item h6">
                     <Link className="nav-link link-secondary" to="/register">Register</Link>
                 </li>
-                {!token?
+                {!(tokenExist)?
                     <li className="nav-item h6">
                         <Link className="nav-link link-secondary" to="/login">Login</Link>
                     </li>
@@ -56,12 +39,12 @@ export default function Navbar() {
                         <span className="nav-link dropdown-toggle border rounded-5 px-3" style={{backgroundColor:"#70E7B5", width:"fit-content"}} href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {user?user.email:'Profile'}
                         </span>
-                        <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <ul className="dropdown-menu px-3" aria-labelledby="navbarDropdownMenuLink">
                             <li>
                                 <Link className="nav-link link-secondary" to="/account">Account</Link>
                             </li>
                             <li>
-                                <Link className="nav-link link-secondary" to="/logout">Logout</Link>
+                                <Link className="nav-link link-secondary" to="/login" onClick={()=>logOut()}>Logout</Link>
                             </li>
                         </ul>
                     </li>

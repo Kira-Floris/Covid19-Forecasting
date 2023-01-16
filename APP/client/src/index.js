@@ -3,14 +3,10 @@ import ReactDOM from 'react-dom/client';
 // import "bulma/css/bulma.min.css";
 import App from './App';
 
-import {UserProvider} from "./context/UserContext";
+import {AuthProvider} from "./context/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <UserProvider>
-        <App/>
-    </UserProvider>
-);
+root.render(<App/>);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
