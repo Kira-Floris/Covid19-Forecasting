@@ -13,6 +13,15 @@ const Documentation = () => {
             <h1>Documentation</h1>
             <hr/>
             <div className="py-2">
+                <h3>Accessing the FAOCS api</h3>
+                <p>To access the FAOCS predictions and data, the FAOCS needs your Token. You can get the token by registering and going to your account information.
+                    <br/><br/>
+                    In your account, you can also regenerate your token or update your account information.    
+                </p>
+                
+            </div>
+            <hr/>
+            <div className="py-2">
                 <h3>Getting Covid 19 Information</h3>
                 <p>This endpoint returns data used in this project. This data was collected from <a href="ourworldindata.org">OurWorldInData</a> website. 
                 The data contains Covid 19 information from all over the world from the first case in 2019 till now.</p>

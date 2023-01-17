@@ -136,12 +136,12 @@ export const Dashboard = () => {
                 <h1 className="pb-3">Dashboard</h1>
                 <hr/>
                 <div className="py-4">
-                    <h2 className="pb-3">Forecasting</h2>
+                    <h2 className="pb-3">Forecasting Future Dates</h2>
                     <div style={{width:700}} className="d-flex justify-content-center">
                         {
                             (Object.keys(chartData).length!==0)?
                                 <LineChart chartData={chartData}/>:
-                                "Loading"
+                                <Loading/>
                         }
                     </div>
                 </div>
@@ -151,7 +151,7 @@ export const Dashboard = () => {
                         {
                             (Object.keys(allChartData).length!==0)?
                                 <LineChart chartData={allChartData}/>:
-                                "Loading"
+                                <Loading/>
                         }
                     </div>
                 </div>
@@ -161,12 +161,20 @@ export const Dashboard = () => {
                         {
                             (Object.keys(covidInfoData).length!==0)?
                                 <LineChart chartData={covidInfoData}/>:
-                                "Loading"
+                                <Loading/>
                         }
                     </div>
                 </div>
             </div>
             
+        </div>
+    )
+}
+
+function Loading(){
+    return (
+        <div className="d-flex justify-content-center align-items-center">
+            <h2 className="text-secondary">Loading...</h2>
         </div>
     )
 }
