@@ -14,7 +14,8 @@ const Documentation = () => {
             <hr/>
             <div className="py-2">
                 <h3>Getting Covid 19 Information</h3>
-                <p></p>
+                <p>This endpoint returns data used in this project. This data was collected from <a href="ourworldindata.org">OurWorldInData</a> website. 
+                The data contains Covid 19 information from all over the world from the first case in 2019 till now.</p>
                 <div>
                     <pre className="bg-light border p-3">
                         <code>
@@ -29,6 +30,8 @@ const Documentation = () => {
             <hr/>
             <div className="py-2">
                 <h3>Getting Forecasting Line</h3>
+                <p>This endpoint returns predictions line data from the winning model, Facebook Prophet, 
+                    starting from the first date in the dataset till the current date the request is sent plus 18 days.</p>
                 <div>
                     <pre className="bg-light border p-3">
                         <code>
@@ -42,7 +45,10 @@ const Documentation = () => {
             </div>
             <hr/>
             <div className="py-2">
-                <h3>Getting Covid 19 Information</h3>
+                <h2>Getting Predictions Models.</h2>
+                <h5>The winning model is Facebook Prophet</h5>
+                <p>This endpoint returns predictions starting from the date the request is made and 18 days in the future. 
+                    The endpoint requires a token that you can get in your account after registering.</p>
                 <div>
                     <pre className="bg-light border p-3">
                         <code>
