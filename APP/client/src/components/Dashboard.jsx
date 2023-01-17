@@ -15,6 +15,8 @@ export const Dashboard = () => {
     }
 
     const [chartData,setChartData] = useState({})
+    const [allChartData, setAllChartData] = useState({});
+    const [covidInfoData, setCovidInfoData] = useState({});
 
     let fetchData = async ()=>{
         const response_d = await fetch('/api/data', requestOptions);
@@ -38,9 +40,38 @@ export const Dashboard = () => {
         let dates = response_data_p.data.map((row)=>row.date);
 
         let data_ = response_data_d.data.map((row)=>row.new_cases);
+        let deaths = response_data_d.data.map((row)=>row.new_deaths);
         let lines = response_data_p.data.map((row)=>row.line);
+        const slider_temp = 1025;
         
         setChartData({  
+            labels:dates.slice(slider_temp),
+            datasets:[
+                {
+                    label:"Covid 19 Cases",
+                    data:data_.slice(slider_temp),
+                    backgroundColor: [
+                        "#1c3030"
+                    ],
+                    borderColor: "black", 
+                    borderWidth: 2,
+                    pointRadius:1.5,
+                },
+                {
+                    label:"Forecasting Line",
+                    data:lines.slice(slider_temp),
+                    backgroundColor: [
+                        "#63e3e7"
+                    ],
+                    tension:0.7,
+                    borderWidth:3,
+                    pointRadius:1.5,
+                    pointHoverRadius:0,
+                },
+            ]
+        });
+
+        setAllChartData({
             labels:dates,
             datasets:[
                 {
@@ -50,8 +81,8 @@ export const Dashboard = () => {
                         "#1c3030"
                     ],
                     borderColor: "black", 
-                    borderWidth: 0.1,
-                    pointRadius:1.5,
+                    borderWidth: 0.4,
+                    pointRadius:1.1,
                 },
                 {
                     label:"Forecasting Line",
@@ -59,9 +90,36 @@ export const Dashboard = () => {
                     backgroundColor: [
                         "#63e3e7"
                     ],
-                    tension:0.4,
-                    borderWidth:1,
-                    pointRadius:0.5,
+                    tension:0.7,
+                    borderWidth:2,
+                    pointRadius:1.1,
+                    pointHoverRadius:0,
+                },
+            ]
+        });
+
+        setCovidInfoData({
+            labels:dates,
+            datasets:[
+                {
+                    label:"Cases",
+                    data:data_,
+                    backgroundColor: [
+                        "#1c3030"
+                    ],
+                    borderColor: "black", 
+                    borderWidth: 0.4,
+                    pointRadius:1.1,
+                },
+                {
+                    label:"Deaths",
+                    data:deaths,
+                    backgroundColor: [
+                        "#f00f0f"
+                    ],
+                    tension:0.7,
+                    borderWidth:2,
+                    pointRadius:1.1,
                     pointHoverRadius:0,
                 },
             ]
@@ -70,18 +128,42 @@ export const Dashboard = () => {
 
     useEffect(()=>{
         fetchData();
-    },[data]);
+    },[]);
 
     return (
         <div className='d-flex justify-content-center'>
             <div>
-                <h1 className='text-center'>Dashboard</h1>
-                <div style={{width:700}} className="d-flex justify-content-center">
-                    {
-                        (Object.keys(chartData).length!==0)?
-                            <LineChart chartData={chartData}/>:
-                            "Loading"
-                    }
+                <h1 className="pb-3">Dashboard</h1>
+                <hr/>
+                <div className="py-4">
+                    <h2 className="pb-3">Forecasting</h2>
+                    <div style={{width:700}} className="d-flex justify-content-center">
+                        {
+                            (Object.keys(chartData).length!==0)?
+                                <LineChart chartData={chartData}/>:
+                                "Loading"
+                        }
+                    </div>
+                </div>
+                <div className="py-4">
+                    <h2 className="pb-3">Forecasting Line</h2>
+                    <div style={{width:700}} className="d-flex justify-content-center">
+                        {
+                            (Object.keys(allChartData).length!==0)?
+                                <LineChart chartData={allChartData}/>:
+                                "Loading"
+                        }
+                    </div>
+                </div>
+                <div className="py-4">
+                    <h2 className="pb-3">Covid 19 Information</h2>
+                    <div style={{width:700}} className="d-flex justify-content-center">
+                        {
+                            (Object.keys(covidInfoData).length!==0)?
+                                <LineChart chartData={covidInfoData}/>:
+                                "Loading"
+                        }
+                    </div>
                 </div>
             </div>
             

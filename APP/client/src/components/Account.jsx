@@ -69,7 +69,7 @@ const Account = () => {
                 "Content-Type":"application/json",
                 "Authorization":"Bearer "+String(authTokens)
             },
-            body:JSON.stringify({"old_assword":e.target.oldpassword.value,"new_assword":e.target.newpassword.value})
+            body:JSON.stringify({"old_password":e.target.old_password.value,"new_password":e.target.new_password.value})
         });
         if(response.status===200){
             console.log('Updated Successfully');
@@ -82,7 +82,7 @@ const Account = () => {
         getUser()
     },[])
     return (
-        <div className='container p-5'>
+        <div className='container py-5 w-75'>
             <h2>Account</h2>
             <div className="mx-3 my-4 p-4 border rounded-2 bg-light">
                 <h3>Personal Details</h3>
@@ -135,7 +135,39 @@ const Account = () => {
                 </div>
             </div>
             <div className="mx-3 my-4 p-5 border rounded-2 bg-light">
-                hellpo
+                <h3>Update Password</h3>
+                <form className="container px-3 pt-1" onSubmit={handlePassword}>
+                    <div className="form-group pb-1">
+                        <label className="">Old Password</label>
+                        <div className="control">
+                            <input
+                            type="password"
+                            placeholder="Enter your old password"
+                            name="old_password"
+                            className="form-control"
+                            required
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group pb-2">
+                        <label className="">New Password</label>
+                        <div className="control">
+                            <input
+                            type="password"
+                            placeholder="Enter new password"
+                            name="new_password"
+                            className="form-control"
+                            required
+                            />
+                        </div>
+                    </div>
+                    <ErrorMessage message={errorMessage} />
+                    <div className="w-100">
+                        <button className="btn btn-md btn-primary rounded-0 px-5" type="submit">
+                        Update Password
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     )

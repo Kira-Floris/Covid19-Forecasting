@@ -5,9 +5,22 @@ import AuthContext from '../context/AuthContext';
 
 
 export default function Navbar() {
-    const {authTokens, loggedInUser, user, logOut} = useContext(AuthContext);
+    const {authTokens, loggedUser, user, logOut} = useContext(AuthContext);
     const tokenExist = (localStorage.getItem('authTokens')!==null)?true:false;
     const [errorMessage, setErrorMessage] = useState("");
+    let fetchUser = async () =>{
+        let response = await fetch('/auth/me',{
+            method:"GET",
+            headers:{"Authorization":"Bearer "+String(authTokens)},
+        });
+        let data = await response.json()
+        if (response.status===200){
+            return data;
+        }else{
+            return null
+        }
+    }
+    // console.log(fetchUser());
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light shadow mb-4">
         <div className="container">
@@ -15,29 +28,33 @@ export default function Navbar() {
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
-          <div className="collapse navbar-collapse mx-3" id="navbarText">
+          <div className="collapse navbar-collapse" id="navbarText">
             <span className="me-auto"></span>
             <ul className="navbar-nav mb-2 mb-lg-0">
-                <li className="nav-item h6">
+                <li className="nav-item h6 mx-3">
                     <Link className="nav-link link-secondary" to="/">Home</Link>
                 </li>
-                <li className="nav-item h6">
-                    <Link className="nav-link link-secondary" to="/">Documentation</Link>
+                <li className="nav-item h6 mx-3">
+                    <Link className="nav-link link-secondary" to="/documentation">Documentation</Link>
                 </li>
-                <li className="nav-item h6">
+                <li className="nav-item h6 mx-3">
                     <Link className="nav-link link-secondary" to="/dashboard">Dashboard</Link>
                 </li>
-                <li className="nav-item h6">
+                <li className="nav-item h6 mx-3">
                     <Link className="nav-link link-secondary" to="/register">Register</Link>
                 </li>
                 {!(tokenExist)?
                     <li className="nav-item h6">
-                        <Link className="nav-link link-secondary" to="/login">Login</Link>
+                        <Link className="nav-link link-secondary mx-3" to="/login">Login</Link>
                     </li>
                     :
                     <li className="nav-item dropdown h6">
                         <span className="nav-link dropdown-toggle border rounded-5 px-3" style={{backgroundColor:"#70E7B5", width:"fit-content"}} href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {user?user.email:'Profile'}
+                            {
+                                // user?
+                                // user.email:
+                                'Profile'
+                            }
                         </span>
                         <ul className="dropdown-menu px-3" aria-labelledby="navbarDropdownMenuLink">
                             <li>

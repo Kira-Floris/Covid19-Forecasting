@@ -100,9 +100,10 @@ export const AuthProvider = ({children}) =>{
                 console.log('Something Went Wrong')
             }
         } catch(err){
-            setAuthTokens(null);
-            setUser(null);
-            localStorage.removeItem('authTokens');
+            console.log('Failed to change')
+            // setAuthTokens(null);
+            // setUser(null);
+            // localStorage.removeItem('authTokens');
         }
         
     }
@@ -178,7 +179,7 @@ export const AuthProvider = ({children}) =>{
         const tok = localStorage.getItem('authTokens');
         const decodedToken = jwt_decode(tok);
         
-        if(!decodedToken.email){
+        if(!decodedToken.id){
             logOut();
         }
         if(loading){
