@@ -69,6 +69,23 @@ async def get_users(
     users = session.query(models_user.User).all()
     return {"data":users}
 
+@router.get('/users/{id}')
+async def get_user(
+    id:int,
+    token:str=fastapi.Depends(utils_auth.verify_token), 
+    session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
+    ):
+    try:
+        user = session.query(models_user.User).get(id)
+        if user:
+            return user
+        else:
+            response.status_code = 404
+            return {"message":"user does not exist","error":"user does not exist"}
+    except:
+        response.status_code = 404
+        return {"message":"user does not exist","error":"user does not exist"}
+
 @router.delete('/users/{id}')
 async def delete_user(
     id:int,
@@ -104,3 +121,20 @@ async def update_user(
     except:
         response.status_code = 400
         return {"message":"bad header","error":"bad header"}
+    
+@router.put('/reset')
+async def update_password(
+    request:fastapi.Request,
+    response:fastapi.Response,
+    schema:schemas_user.PasswordReset,
+    token:str=fastapi.Depends(utils_auth.verify_token), 
+    session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
+):
+    token = request.headers['Authorization']
+    user = await utils_auth.check_token(token,session)
+    user = session.query(models_user.User).get(user.id)
+    check = await utils_auth.change_password(user=user, old_password=schema.old_password, new_password=schema.new_password,db=session)
+    if not check:
+        response.status_code = 400
+        return {"message":"bad header","error":"bad header"}
+    return check

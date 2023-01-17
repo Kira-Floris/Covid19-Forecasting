@@ -63,6 +63,49 @@ export const AuthProvider = ({children}) =>{
         }
         
     }
+    let generateNewToken = async() =>{
+        const url = '/auth/token/update';
+        try{
+            const response = await fetch(url,{
+                method:'GET',
+                headers:{
+                    'Authorization': 'Bearer '+String(authTokens),
+                }
+            })
+            let data = await response.json();
+
+            if (response.status === 200){
+                setAuthTokens(data.token);
+                setUser(jwt_decode(data.token));
+                localStorage.setItem('authTokens',JSON.stringify(data.token));
+                // get the user role
+                const urlUser = '/auth/me';
+                let res = await fetch(urlUser,{
+                    method: 'GET',
+                    headers:{
+                        'Content-type':'application/json',
+                        'Authorization': 'Bearer '+String(data.token)
+                    }
+                });
+                let dat = await res.json();
+                if(res.status===200){
+                    setLoggedUser(dat);
+                    history.push('/account');
+                }else{
+                    setLoggedUser(null);
+                    console.log('Something Went Wrong')
+                    history.push('/login')
+                }
+            }else{
+                console.log('Something Went Wrong')
+            }
+        } catch(err){
+            setAuthTokens(null);
+            setUser(null);
+            localStorage.removeItem('authTokens');
+        }
+        
+    }
 
     let registerUser = async(e)=>{
         e.preventDefault();
@@ -158,6 +201,7 @@ export const AuthProvider = ({children}) =>{
         logOut:logOut,
         loggedInUser:loggedInUser,
         loggedUser:loggedUser,
+        generateNewToken:generateNewToken,
     }
 
     return (

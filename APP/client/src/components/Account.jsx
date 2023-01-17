@@ -8,7 +8,7 @@ let object = {
 }
 
 const Account = () => {
-    let {user, authTokens, loggedUser} = useContext(AuthContext);
+    let {user, authTokens, loggedUser, generateNewToken} = useContext(AuthContext);
     let [person, setPerson] = useState({object});
     let [errorMessage, setErrorMessage] = useState("");
 
@@ -61,22 +61,22 @@ const Account = () => {
         }
     }
 
-    // let handlePassword = async(e)=>{
-    //     e.preventDefault();
-    //     let response = await fetch(passwordUrl,{
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type":"application/json",
-    //             "Authorization":"Bearer "+String(authTokens)
-    //         },
-    //         body:JSON.stringify({"currentPassword":e.target.oldpassword.value,"newPassword":e.target.newpassword.value})
-    //     });
-    //     if(response.status===200){
-    //         console.log('Updated Successfully');
-    //     }else{
-    //         console.log("Something Went Wrong")
-    //     }
-    // }
+    let handlePassword = async(e)=>{
+        e.preventDefault();
+        let response = await fetch('/auth/reset',{
+            method: "PUT",
+            headers: {
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+String(authTokens)
+            },
+            body:JSON.stringify({"old_assword":e.target.oldpassword.value,"new_assword":e.target.newpassword.value})
+        });
+        if(response.status===200){
+            console.log('Updated Successfully');
+        }else{
+            console.log("Something Went Wrong")
+        }
+    }
 
     useEffect(()=>{
         getUser()
@@ -128,7 +128,7 @@ const Account = () => {
                 <div className="px-3">
                     <pre className='border p-2 rounded-1 bg-white'><code className="language-css">{authTokens}</code></pre>
                     <div className="w-100">
-                        <button className="btn btn-md btn-primary rounded-0 px-5" type="button">
+                        <button className="btn btn-md btn-primary rounded-0 px-5" type="button" onClick={()=>generateNewToken()}>
                         Generate New Token
                         </button>
                     </div>
