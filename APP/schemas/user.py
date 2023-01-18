@@ -5,6 +5,7 @@ import typing
 class UserBase(pydantic.BaseModel):
     email:str
     company:str
+    role:typing.Optional[str]=None
     
 class UserCreate(UserBase):
     password:str

@@ -18,6 +18,10 @@ async def create_user(
     user:schemas_user.UserCreate, 
     response:fastapi.Response,
     session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)):
+    if user.role:
+        if user.role not in models_user.user_roles:
+            response.status_code=400
+            return {"message":"user role is not valid", "error":"user role is not valid"}
     
     user = await utils_auth.create_user(user=user, db=session)
     if user==None:

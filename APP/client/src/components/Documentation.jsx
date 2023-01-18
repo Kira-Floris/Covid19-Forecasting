@@ -9,7 +9,7 @@ const Documentation = () => {
 
     const bearer = "{'Authorization':'Bearer '+<Token>}"
     return (
-        <div className="container">
+        <div className="container pt-4">
             <h1>Documentation</h1>
             <hr/>
             <div className="py-2">

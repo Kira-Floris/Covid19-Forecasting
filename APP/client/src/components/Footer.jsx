@@ -8,7 +8,7 @@ const Footer = () => {
             <hr/>
             <div className="col-4">
                 <p>
-                    <b>© 2022 <span style={{color:"#70E7B5"}}>FAOCS</span>, Inc</b>
+                    <b>© 2023 <span style={{color:"#70E7B5"}}>FAOCS</span>, Inc</b>
                 </p>
             </div>
             <div className="col-8 text-end">

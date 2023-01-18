@@ -8,7 +8,7 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   return (
-    <div className="container d-flex justify-content-center align-items-center w-md-50 w-50">
+    <div className="container d-flex justify-content-center align-items-center w-md-50 w-50 pt-4">
       <form className="container px-5 pt-3" onSubmit={registerUser}>
         <h1 className="pb-3 text-center">Register</h1>
         <div className="form-group">

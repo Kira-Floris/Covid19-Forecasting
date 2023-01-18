@@ -26,7 +26,7 @@ export default function Navbar() {
         fetchUser();
     },[]);
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow mb-4">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow">
         <div className="container">
             <Link className="navbar-brand" to="/" style={{color:"#70E7B5", fontSize:"2rem", fontWeight:"bold"}}>FAOCS</Link>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">

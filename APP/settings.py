@@ -39,11 +39,15 @@ JWT_ALGORITHM = 'HS256'
 PORT = int(os.getenv('PORT', default=8000)) or 8000
 HOST = '0.0.0.0'
 
+MAIL_USERNAME = 'nzafloris'
+MAIL_PASSWORD = 'sikrksaaxuzhfuru'
+MAIL_FROM = 'nzafloris@gmail.com'
+
 # email settings
 EMAIL_CONF = fastapi_mail.ConnectionConfig(
-    MAIL_USERNAME = 'nzafloris',
-    MAIL_PASSWORD = 'sikrksaaxuzhfuru',
-    MAIL_FROM = 'nzafloris@gmail.com',
+    MAIL_USERNAME = MAIL_USERNAME,
+    MAIL_PASSWORD = MAIL_PASSWORD,
+    MAIL_FROM = MAIL_FROM,
     MAIL_PORT = 587,
     MAIL_SERVER = 'smtp.gmail.com',
     MAIL_STARTTLS = True,

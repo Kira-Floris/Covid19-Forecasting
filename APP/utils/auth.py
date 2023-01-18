@@ -42,11 +42,12 @@ async def change_password(user, old_password, new_password, db:sqlalchemy.orm.Se
 async def create_user(user:schemas.user.UserCreate, db:sqlalchemy.orm.Session):
     if get_user_by_email(user.email, db):
         return None
+    role = user.role if user.role=='admin' else 'user'
     hashed_password = hash.bcrypt.hash(user.password)
     user_dict = user.dict()
     # user_dict['date_created'] = datetime.datetime.now
     del user_dict['password']
-    user_obj = models.user.User(email=user.email, company=user.company, hashed_password=hashed_password, token="")
+    user_obj = models.user.User(email=user.email, company=user.company, hashed_password=hashed_password, role=user.role, token="")
     
     db.add(user_obj)
     db.commit()

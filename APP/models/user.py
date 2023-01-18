@@ -8,12 +8,14 @@ import sys
 sys.path.append('..')
 from config.database import Base
 
+user_roles = ['admin','user']
 
 class User(Base):
     __tablename__ = 'User'
     id = sql.Column(sql.Integer, primary_key=True)
-    email = sql.Column(sql.String, )
+    email = sql.Column(sql.String)
     company = sql.Column(sql.String)
+    role = sql.Column(sql.String)
     hashed_password = sql.Column(sql.String)
     date_created = sql.Column(sql.DateTime, default=datetime.datetime.now)
     
@@ -22,6 +24,9 @@ class User(Base):
     
     def verify_password(self, password:str):
         return hash.bcrypt.verify(password, self.hashed_password)
+    
+    def verify_token(self, token:str):
+        return token==self.token
     
     def update(self, **kwargs):
         for key, value in kwargs.items():

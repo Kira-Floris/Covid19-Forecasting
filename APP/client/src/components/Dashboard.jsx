@@ -131,7 +131,7 @@ export const Dashboard = () => {
     },[]);
 
     return (
-        <div className='d-flex justify-content-center'>
+        <div className='d-flex justify-content-center pt-4'>
             <div>
                 <h1 className="pb-3">Dashboard</h1>
                 <hr/>

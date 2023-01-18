@@ -57,3 +57,20 @@ async def automated_email(df, session:sqlalchemy.orm.Session):
     finally:
         return {"message":"Emails sent successfully"}
     
+async def contact_email(email, subject, body):
+    recipients = [email, settings.MAIL_FROM]
+    message = fastapi_mail.MessageSchema(
+        subject=subject,
+        recipients=recipients,
+        body=str(body),
+        subtype=fastapi_mail.MessageType.plain
+    )
+    fm = fastapi_mail.FastMail(conf)
+    try:
+        response = await fm.send_message(message)
+    except Exception as err:
+        print('failed: '+err)
+        return False, "Failed to send emails"
+    finally:
+        return True, "Emails sent successfully"
+    
