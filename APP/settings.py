@@ -28,7 +28,18 @@ DATA_SOURCE = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
 DATA_SAVE_FILE = './data/covid19.csv'
 PREDICTION_SAVE_FILE = './data/covid19-future-values.csv'
 PREDICTION_LINE_FILE = './data/covid19-future-values_line.csv'
-DATA_COLUMNS = ['date','location','iso_code','new_cases','new_deaths']
+DATA_COLUMNS = ['date','location','iso_code','new_cases','new_deaths',
+                'positive_rate','tests_per_case',
+                'male_smokers','female_smokers',
+                'new_vaccinations','handwashing_facilities',
+                'life_expectancy','new_tests','reproduction_rate']
+
+PROPHET_COLUMNS = ['date','new_cases','new_deaths',
+                'positive_rate','tests_per_case',
+                'male_smokers','female_smokers',
+                'new_vaccinations','handwashing_facilities',
+                'life_expectancy','new_tests','reproduction_rate']
+
 THRESHOLD = 100
 
 # JWT Credentials
