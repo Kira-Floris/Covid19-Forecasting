@@ -9,6 +9,7 @@ export default function Navbar() {
     const tokenExist = (localStorage.getItem('authTokens')!==null)?true:false;
     const [errorMessage, setErrorMessage] = useState("");
     const [userEmail, setUserEmail] = useState(null);
+    const [userRole, setUserRole] = useState(null);
     let fetchUser = async () =>{
         let response = await fetch('/auth/me',{
             method:"GET",
@@ -17,9 +18,11 @@ export default function Navbar() {
         let data = await response.json();
         if (response.status===200){
             setUserEmail(data.email);
+            setUserRole(data.role);
         }else{
             console.log('Something went wrong fetching email');
             setUserEmail(null);
+            setUserRole(null);
         }
     }
     useEffect(()=>{
@@ -52,23 +55,33 @@ export default function Navbar() {
                         <Link className="nav-link link-secondary mx-3" to="/login">Login</Link>
                     </li>
                     :
-                    <li className="nav-item dropdown h6">
-                        <span className="nav-link dropdown-toggle border rounded-5 px-3" style={{backgroundColor:"#70E7B5", width:"fit-content"}} href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {
-                                userEmail?
-                                userEmail:
-                                'Profile'
-                            }
-                        </span>
-                        <ul className="dropdown-menu px-3" aria-labelledby="navbarDropdownMenuLink">
-                            <li>
-                                <Link className="nav-link link-secondary" to="/account">Account</Link>
+                    <>
+                        {!(userRole!=='admin')
+                        ?
+                            <li className="nav-item h6">
+                                <Link className="nav-link link-secondary mx-3" to="/dashboard/users">Users</Link>
                             </li>
-                            <li>
-                                <Link className="nav-link link-secondary" to="/login" onClick={()=>logOut()}>Logout</Link>
-                            </li>
-                        </ul>
-                    </li>
+                        :
+                        <></>
+                        }
+                        <li className="nav-item dropdown h6">
+                            <span className="nav-link dropdown-toggle border rounded-5 px-3" style={{backgroundColor:"#70E7B5", width:"fit-content"}} href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {
+                                    userEmail?
+                                    userEmail:
+                                    'Profile'
+                                }
+                            </span>
+                            <ul className="dropdown-menu px-3" aria-labelledby="navbarDropdownMenuLink">
+                                <li>
+                                    <Link className="nav-link link-secondary" to="/account">Account</Link>
+                                </li>
+                                <li>
+                                    <Link className="nav-link link-secondary" to="/login" onClick={()=>logOut()}>Logout</Link>
+                                </li>
+                            </ul>
+                        </li>
+                    </>
                 }
             </ul>
           </div>

@@ -47,7 +47,7 @@ async def create_user(user:schemas.user.UserCreate, db:sqlalchemy.orm.Session):
     user_dict = user.dict()
     # user_dict['date_created'] = datetime.datetime.now
     del user_dict['password']
-    user_obj = models.user.User(email=user.email, company=user.company, hashed_password=hashed_password, role=user.role, token="")
+    user_obj = models.user.User(email=user.email, company=user.company, hashed_password=hashed_password, role=role, token="")
     
     db.add(user_obj)
     db.commit()

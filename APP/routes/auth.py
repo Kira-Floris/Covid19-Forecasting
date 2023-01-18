@@ -70,12 +70,13 @@ async def get_users(
     token:str=fastapi.Depends(utils_auth.verify_token), 
     session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
     ):
-    users = session.query(models_user.User).all()
+    users = session.query(models_user.User).filter(models_user.User.id!=token.id).all()
     return {"data":users}
 
 @router.get('/users/{id}')
 async def get_user(
     id:int,
+    response:fastapi.Response,
     token:str=fastapi.Depends(utils_auth.verify_token), 
     session:sqlalchemy.orm.Session=fastapi.Depends(settings.get_session)
     ):
@@ -120,6 +121,8 @@ async def update_user(
             user.email = schema.email
         if schema.company:
             user.company = schema.company
+        if schema.role:
+            user.role = schema.role
         session.commit()
         return user
     except:

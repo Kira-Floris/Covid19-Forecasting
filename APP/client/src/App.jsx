@@ -10,6 +10,7 @@ import Home from './components/Home';
 import { Dashboard } from './components/Dashboard';
 import Documentation from './components/Documentation';
 import Account from './components/Account';
+import AdminUser from './components/AdminUser';
 import AuthContext, {AuthProvider} from './context/AuthContext';
 import PrivateRoute from './utils/PrivateRoute';
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" exact><Login/></Route>
           <Route path="/documentation" exact><Documentation/></Route>
           <PrivateRoute component={Dashboard} path="/dashboard" exact/>
+          <PrivateRoute component={AdminUser} path="/dashboard/users" exact/>
           <PrivateRoute component={Account} path="/account" exact/>
           <Footer/>
       </AuthProvider>

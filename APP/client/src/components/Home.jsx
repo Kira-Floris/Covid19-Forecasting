@@ -5,7 +5,7 @@ const Home = () => {
     return (
       <div>
         <div className='px-5' style={{backgroundColor:"#218e9252"}}>
-            <div className='row container' style={{height:"80vh"}}>
+            <div className='row container' style={{height:"85vh"}}>
                 <div className="col-9 d-flex align-items-center justify-content-center px-5">
                     <h1 className='text-center display-5'><b>Forecasting And Alerting On Covid 19 Cases Spikes</b></h1>
                 </div>
