@@ -69,18 +69,22 @@ def main():
     dataset = rwanda_model_data.set_index('date')
     # prophet_ = Prophet.ProphetModel(dataset, 'new_cases')
     # prophet_.train()
+    
+    # print(prophet_.data)
+    p = Prophet.prophet_model(rwanda_null_treated_data)
+    predictions['fb_prophet'], predictions['date'] = p[0][-18:], p[1][-18:]
+    
+    # forecasting line chart
+    prediction_line['line'], prediction_line['date'] = p
+    
     print('Training FbProphet finished')
     print('---------------------------')
-    # print(prophet_.data)
-    predictions['fb_prophet'], predictions['date'] = prophet_.data_predictions(start=tail)
+    
+    prediction_line.to_csv(settings.PREDICTION_LINE_FILE)
     
     # saving predictions data
     # print(predictions)
     predictions.to_csv(settings.PREDICTION_SAVE_FILE)
-    
-    # forecasting line chart
-    prediction_line['date'], prediction_line['line'] = PROPHET.prophet_model.predictions
-    prediction_line.to_csv(settings.PREDICTION_LINE_FILE)
     
     print('Future values saved')
     print('---------------------------')

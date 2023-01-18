@@ -6,6 +6,7 @@ from sklearn.metrics import mean_squared_error
 import pandas as pd
 import numpy as np
 import itertools
+import datetime
 
 class ProphetModel:
   models = {}
@@ -63,11 +64,9 @@ all_params = [dict(zip(param_grid.keys(), v)) for v in itertools.product(*param_
 
 
 def prophet_model(dat, target='new_cases', period=18):
-  dat = rwanda_null_treated_data[model_columns]
+  dat = dat[model_columns]
   dat.rename(columns={target:'y','date':'ds'}, inplace=True)
 
-
-  
   for params in all_params:
     p = Prophet(interval_width=0.95, weekly_seasonality=True, **params)
 
@@ -78,9 +77,11 @@ def prophet_model(dat, target='new_cases', period=18):
     p.add_regressor(i)
 
   p.fit(dat)
+  # print(p)
 
   # prepping future values
   today = datetime.date.today()
+  # print(today)
   period = period+1
   date_list = [str(today + datetime.timedelta(days=x)) for x in range(period)]
   date_list.remove(str(today))
@@ -95,6 +96,7 @@ def prophet_model(dat, target='new_cases', period=18):
   future_data = pd.DataFrame(temp)
 
   some = pd.concat([dat, future_data])
+  # print(some)
   
   forecast_data = p.predict(some)
   return list(forecast_data['yhat']), [str(i.date()) for i in forecast_data['ds']]

@@ -1,4 +1,5 @@
 import fastapi
+from fastapi.staticfiles import StaticFiles
 from fastapi_utils.tasks import repeat_every
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
@@ -103,6 +104,10 @@ async def retrieve_data():
     # with SessionLocal() as session:
         # await background(session)
     pass
+
+
+# mounting frontend
+app.mount('/', StaticFiles(directory='client/build', html=True),name='templates')
 
 # running app
 if __name__=='__main__':
