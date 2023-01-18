@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/static/js/main.f3646e64.js",
+    "static/media/covid-19.png": "/static/media/covid-19.b60b653b5277d33c6fb6.png",
+    "index.html": "/index.html",
+    "main.f3646e64.js.map": "/static/js/main.f3646e64.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.f3646e64.js"
+  ]
+}
