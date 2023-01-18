@@ -101,8 +101,8 @@ async def background(session):
 @app.on_event('startup')
 @repeat_every(seconds=86400, wait_first=False)
 async def retrieve_data():
-    # with SessionLocal() as session:
-        # await background(session)
+    with SessionLocal() as session:
+        await background(session)
     pass
 
 
