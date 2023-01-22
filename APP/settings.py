@@ -47,7 +47,7 @@ JWT_SECRET = 'j2d98h9sad9832hd9h28hq3ei2uhdi2h39871dhj923hd'
 JWT_ALGORITHM = 'HS256'
 
 # server settings
-PORT = int(os.getenv('PORT', default=10000)) or 10000
+PORT = int(os.getenv('PORT', default=8000)) or 8000
 HOST = '0.0.0.0'
 
 MAIL_USERNAME = 'nzafloris'

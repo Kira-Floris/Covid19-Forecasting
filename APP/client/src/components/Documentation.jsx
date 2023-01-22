@@ -1,6 +1,6 @@
 import React from 'react';
 
-let url = "faocs.onrender.com";
+let url = "api.faocs.onrender.com";
 
 const Documentation = () => {
     const dataUrl = url+'/api/data';
