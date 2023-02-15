@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim
+FROM python3.7.16
   
 ENV PYTHONUNBUFFERED True
   
