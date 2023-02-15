@@ -1,5 +1,4 @@
-FROM python3.7.16  
-ENV PYTHONUNBUFFERED True  
+FROM python3.7.16
 WORKDIR /app
 COPY . .
 ENV MAX_WORKERS="1"
